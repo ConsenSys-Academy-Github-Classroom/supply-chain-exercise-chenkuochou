@@ -3,26 +3,26 @@ pragma solidity >=0.5.16 <0.9.0;
 
 contract SupplyChain {
 
-  address owner;
-  uint256 skuCount;
+  address public owner;
+  uint public skuCount;
 
-  mapping (uint256 => Item) public items;
+  mapping (uint => Item) public items;
 
   enum State {ForSale, Sold, Shipped, Received}
 
   struct Item {
     string name;
-    uint256 sku;
-    uint256 price;
+    uint sku;
+    uint price;
     State state;
     address payable seller;
     address payable buyer;
     }  
   
-  event LogForSale(uint256 sku);
-  event LogSold(uint256 sku);
-  event LogShipped(uint256 sku);
-  event LogReceived(uint256 sku);
+  event LogForSale(uint sku);
+  event LogSold(uint sku);
+  event LogShipped(uint sku);
+  event LogReceived(uint sku);
 
  // Create a modifer, `isOwner` that checks if the msg.sender is the owner of the contract
   // <modifier: isOwner
@@ -41,7 +41,7 @@ contract SupplyChain {
     uint amountToRefund = msg.value - _price;
     items[_sku].buyer.transfer(amountToRefund);
   }
-  modifier forSale (uint256 _sku) {
+  modifier forSale (uint _sku) {
     require(
       items[_sku].price > 0 && items[_sku].state == State.ForSale
     );
